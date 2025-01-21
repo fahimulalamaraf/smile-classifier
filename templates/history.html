@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/classify">Classify</a>
+        <a href="/history">History</a>
+    </nav>
+    <div class="container">
+        <h1>Classification History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Class</th>
+                    <th>Date-Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in history %}
+                <tr>
+                    <td>
+                        <a href="{{ entry.image_path }}" target="_blank">
+                            <img src="{{ entry.image_path }}" alt="Classified Image" height="100" width="100">
+                        </a>
+                    </td>
+                    <td>{{ entry.predicted_class }}</td>
+                    <td>{{ entry.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

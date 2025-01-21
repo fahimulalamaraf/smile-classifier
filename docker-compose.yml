@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_HOST: mysql_container
+      MYSQL_PORT: 3306
+      MYSQL_USER: fahimul_alam  # Replace with the correct username
+      MYSQL_PASSWORD: 12345678Araf#
+      MYSQL_DB: image_holding_db
+      CUDA_VISIBLE_DEVICES: ""  # Disable TensorFlow GPU Initialization
+      TF_CPP_MIN_LOG_LEVEL: 3  # Suppress TensorFlow GPU Warnings
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    command: ["wait-for-it", "mysql_container:3306", "--timeout=30", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678Araf#
+      MYSQL_DATABASE: image_holding_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3300:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
